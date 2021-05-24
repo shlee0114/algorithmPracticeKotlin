@@ -1,3 +1,5 @@
+import DataStructure.Queue.Queue
+import DataStructure.Queue.Queue.plus
 import java.lang.reflect.Type
 
 class FirstCode{
@@ -17,7 +19,6 @@ class FirstCode{
     }
 }
 class SecondCode{
-
     fun solution(genres: Array<String>, plays: IntArray): IntArray {
         val answer = mutableListOf<Int>()
         val value = mutableMapOf<String, MutableMap<Int, Int>>()
@@ -48,9 +49,30 @@ class SecondCode{
         return answer.toIntArray()
     }
 }
+
+class ThirdCode{
+    fun solution(progresses: IntArray, speeds: IntArray): IntArray {
+        val answer = mutableListOf<Int>()
+        val queue = Queue
+        for(i in progresses){
+            queue.push(i)
+        }
+
+        while (progresses.isNotEmpty()){
+            for(i in 0 until queue.count()){
+                (queue[i] + speeds[i]).also { queue[i] = it }
+            }
+
+        }
+
+        return answer.toIntArray()
+    }
+}
 fun main(){
     val first = FirstCode()
     val second = SecondCode()
+    val third = ThirdCode()
     //print(first.solution(arrayOf(arrayOf("yellowhat", "headgear"), arrayOf("bluesunglasses", "eyewear"), arrayOf("green_turban", "headgear"))))
-    print(second.solution(arrayOf("classic", "pop", "classic", "classic", "pop"), intArrayOf(500, 600, 150, 800, 2500)).toString())
+    //print(second.solution(arrayOf("classic", "pop", "classic", "classic", "pop"), intArrayOf(500, 600, 150, 800, 2500)).toString())
+    print(third.solution(intArrayOf(95, 90, 99, 99, 80, 99), intArrayOf(1, 1, 1, 1, 1, 1)))
 }
