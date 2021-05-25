@@ -6,7 +6,7 @@ object Queue {
     private var node : SinglyLinkedList? = null
     private var lastNode : SinglyLinkedList? = null
     private var cnt = 0
-    private var nowIndex = 0
+    private var nowValue : Any? = null
 
     fun pop() : Any?{
         val tmp = node?.value
@@ -30,13 +30,13 @@ object Queue {
     operator fun get(index: Int): Any?{
         if(index > cnt)
             return null
-        nowIndex = index
         var returnValue = node?.value
         var nowNode = node
         for(i in 0 until index){
             nowNode = nowNode?.nextNode
             returnValue = nowNode?.value
         }
+        nowValue = returnValue
         return returnValue
     }
 
@@ -54,14 +54,23 @@ object Queue {
     }
 
     operator fun Any?.plus(data: Any) {
-        var nowNode = node
-        for(i in 0 until nowIndex){
-            nowNode = nowNode?.nextNode
-        }
-        return nowNode?.value + data
+        return nowValue + data
     }
 
-    fun empty() = node == null
+    operator fun Any?.compareTo(i: Any) : Int{
+        return if(nowValue == null){
+            -2
+        }else{
+            when{
+                nowValue > i -> 1
+                nowValue < i -> -1
+                else -> 0
+            }
+        }
+    }
+
+    fun isEmpty() = node == null
+    fun isNotEmpty() = node != null
 
     fun count() = cnt
     private class QueueIterator(start : SinglyLinkedList, val end : SinglyLinkedList) : Iterator<SinglyLinkedList>{

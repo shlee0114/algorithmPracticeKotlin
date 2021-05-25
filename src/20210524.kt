@@ -1,4 +1,6 @@
+
 import DataStructure.Queue.Queue
+import DataStructure.Queue.Queue.compareTo
 import DataStructure.Queue.Queue.plus
 import java.lang.reflect.Type
 
@@ -58,9 +60,18 @@ class ThirdCode{
             queue.push(i)
         }
 
-        while (progresses.isNotEmpty()){
+        while (queue.isNotEmpty()){
             for(i in 0 until queue.count()){
                 (queue[i] + speeds[i]).also { queue[i] = it }
+            }
+            if(queue[0] >= 100){
+                while (queue.isNotEmpty()){
+                    queue.pop()
+                    if(queue.isEmpty())
+                        break
+                    if(queue[0] < 100)
+                        break
+                }
             }
 
         }
@@ -68,6 +79,8 @@ class ThirdCode{
         return answer.toIntArray()
     }
 }
+
+
 fun main(){
     val first = FirstCode()
     val second = SecondCode()
