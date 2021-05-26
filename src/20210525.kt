@@ -22,13 +22,13 @@ class Fir_20210525{
             for(i in 0 until queue.count()){
                 queue[i]!! += speeds[i]//queue[i]?.plusAssign(speeds[i])과 동일
             }
-            if(queue[0]!! >= 100){ // queue[0]?.compareTo(100) >= 0과 동일
+            if(queue.peek()!! >= 100){ // queue[0]?.compareTo(100) >= 0과 동일
                 while (queue.isNotEmpty()){
                     queue.pop()
                     outCnt++
                     if(queue.isEmpty())
                         break
-                    if(queue[0]!! < 100)// queue[0]?.compareTo(100) == -1과 동일
+                    if(queue.peek()!! < 100)// queue[0]?.compareTo(100) == -1과 동일
                         break
                 }
                 answer.add(outCnt)
@@ -72,5 +72,5 @@ class Fir_20210525{
 
 fun main(){
     val first = Fir_20210525()
-    print(first.programmersSolution(intArrayOf(95, 90, 99, 99, 80, 99), intArrayOf(1, 1, 1, 1, 1, 1)))
+    print(first.solution(intArrayOf(95, 90, 99, 99, 80, 99), intArrayOf(1, 1, 1, 1, 1, 1)))
 }
