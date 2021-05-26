@@ -40,6 +40,9 @@ object CustomQueue {
         cnt++
     }
 
+    //queue의 처음 값을 삭제 없이 반환
+    fun peek() = node?.value
+
     //대괄호 작업 대괄호의 있는 수만큼 노드를 이동시킨 후 해당 노드 값을 반환해준다.
     operator fun get(index: Int): SinglyLinkedList?{
         if(index > cnt)
