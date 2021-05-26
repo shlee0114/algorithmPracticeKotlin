@@ -64,9 +64,7 @@ object CustomQueue {
     }
 
     //저장되어있는 노드들을 수열로 만든 후 반환
-    operator fun iterator() : Iterator<SinglyLinkedList>{
-        return QueueIterator(node!!, lastNode!!)
-    }
+    operator fun iterator() : Iterator<SinglyLinkedList> = QueueIterator(node!!, lastNode!!)
 
     //비었는 지 안 비었는 지 체크
     fun isEmpty() = node == null
@@ -76,14 +74,17 @@ object CustomQueue {
     fun count() = cnt
 
     //inner class로 첫 노드와 마지막 노드로 다음 노드가 없을 떄 까지 next를 하여서 수열을 생성한다.
-    private class QueueIterator(start : SinglyLinkedList, val end : SinglyLinkedList) : Iterator<SinglyLinkedList>{
-        val initVal = start
-        override fun hasNext(): Boolean {
-            return initVal != end
-        }
+    private class QueueIterator(val start : SinglyLinkedList, val end : SinglyLinkedList) : Iterator<SinglyLinkedList>{
+        var initVal : SinglyLinkedList? = null
+        override fun hasNext(): Boolean = initVal != end
 
         override fun next(): SinglyLinkedList {
-            return initVal.nextNode!!
+            if(initVal == null){
+                initVal = start
+            }else{
+                initVal = initVal?.nextNode
+            }
+            return initVal!!
         }
     }
 }
