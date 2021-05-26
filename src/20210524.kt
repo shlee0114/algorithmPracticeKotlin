@@ -1,7 +1,3 @@
-
-import DataStructure.Queue.Queue
-import java.lang.reflect.Type
-
 class Fir_20210524{
     //프로그래머스 문제 : 위장
     //서로다른 종류의 옷을 입는 경우의 수 문제

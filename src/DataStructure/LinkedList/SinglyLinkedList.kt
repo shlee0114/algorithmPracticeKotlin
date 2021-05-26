@@ -1,7 +1,5 @@
 package DataStructure.LinkedList
 
-import DataStructure.Queue.Queue
-
 
 //단일 연결 리스트
  class SinglyLinkedList (var nextNode : SinglyLinkedList? = null, var value : Int = -1) {
