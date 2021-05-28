@@ -21,20 +21,22 @@ object CustomStack {
     //처음 데이터는 firstNode와 node에 저장 그 후 데이터가 들어올 떄마다 node에 저장하면서
     //nextNode는 현재 값 기준 앞의 값 prevNode는 현재 값 기준 뒤의 값
     fun push(data : Int){
-        val tmpNode = DoublyLinkedList()
-        tmpNode.value = data
-        tmpNode.nextNode = node
-        if(firstNode == null){
-            firstNode = tmpNode
-        }else{
-            if(firstNode?.prevNode == null){
-                tmpNode.also { firstNode?.prevNode = it }
+        val tmpNode = DoublyLinkedList().apply {
+            value = data
+            nextNode = node
+        }.also {
+            if(firstNode == null){
+                firstNode = it
+            }else{
+                if(firstNode?.prevNode == null){
+                   firstNode?.prevNode = it
+                }
             }
+            if(node != null) {
+               node?.prevNode = it
+            }
+            node = it
         }
-        if(node != null) {
-            tmpNode.also { node?.prevNode = it }
-        }
-        node = tmpNode
         cnt++
     }
 
@@ -77,10 +79,10 @@ object CustomStack {
         override fun hasNext(): Boolean = initVal != end
 
         override fun next(): DoublyLinkedList {
-            if(initVal == null){
-                initVal = start
+            initVal = if(initVal == null){
+                start
             }else{
-                initVal = initVal?.prevNode
+                initVal?.prevNode
             }
             return initVal!!
         }

@@ -16,7 +16,7 @@ object CustomQueue {
             node = null
             return tmp
         }
-        node = node?.nextNode as SinglyLinkedList
+        node = node?.nextNode
         cnt--
         return tmp
     }
@@ -24,19 +24,22 @@ object CustomQueue {
     //노드를 생성 후 저장한 마지막 노드(lastNode)의 다음 노드를 생성한 노드로 지정 후 lastNode를 생성한 노드로 변경
     //만약 첫 생성일 시 처음 노드(node)에도 저장
     fun push(data : Int){
-        val tmpNode = SinglyLinkedList(null, -1)
-        tmpNode.value = data
-        if(node == null){
-            node = tmpNode
-        }else{
-            if(node?.nextNode == null){
-                tmpNode.also { node?.nextNode = it }
+        SinglyLinkedList(null, -1).apply {
+            value = data
+        }.also {
+            if(node == null){
+                node = it
+            }else{
+                if(node?.nextNode == null){
+                    node?.nextNode = it
+                }
             }
+            if(lastNode != null) {
+                lastNode?.nextNode = it
+            }
+            lastNode = it
         }
-        if(lastNode != null) {
-            tmpNode.also { lastNode?.nextNode = it }
-        }
-        lastNode = tmpNode
+
         cnt++
     }
 
@@ -79,10 +82,10 @@ object CustomQueue {
         override fun hasNext(): Boolean = initVal != end
 
         override fun next(): SinglyLinkedList {
-            if(initVal == null){
-                initVal = start
+            initVal = if(initVal == null){
+                start
             }else{
-                initVal = initVal?.nextNode
+                initVal?.nextNode
             }
             return initVal!!
         }
