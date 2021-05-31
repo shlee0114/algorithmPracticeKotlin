@@ -2,14 +2,21 @@ package DataStructure.Stack
 
 import DataStructure.LinkedList.DoublyLinkedList
 
-object CustomStack {
+class CustomStack(){
     //첫 노드와 마지막 노드만 별도로 저장해서 데이터 추가 및 pop을 함에 빠른 속도로 하기 위하여 첫 노드와 마지막 노드만 저장
-    private var firstNode : DoublyLinkedList? = null
-    private var node : DoublyLinkedList? = null
+    private var firstNode : DoublyLinkedList?
+    private var node : DoublyLinkedList?
     private var cnt = 0
+
+    init{
+        firstNode = null
+        node = null
+        cnt = 0
+    }
 
     //stack 처음 값을 반환 후 삭제
     fun pop() : Any?{
+        cnt--
         val value = node?.value
         node = node?.nextNode
         node?.prevNode = null
@@ -20,8 +27,8 @@ object CustomStack {
 
     //처음 데이터는 firstNode와 node에 저장 그 후 데이터가 들어올 떄마다 node에 저장하면서
     //nextNode는 현재 값 기준 앞의 값 prevNode는 현재 값 기준 뒤의 값
-    fun push(data : Int){
-        val tmpNode = DoublyLinkedList().apply {
+    fun push(data : Any){
+        DoublyLinkedList().apply {
             value = data
             nextNode = node
         }.also {

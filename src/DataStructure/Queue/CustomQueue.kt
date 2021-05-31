@@ -2,11 +2,17 @@ package DataStructure.Queue
 
 import DataStructure.LinkedList.SinglyLinkedList
 
-object CustomQueue {
+class CustomQueue() {
     //첫 노드와 마지막 노드만 별도로 저장해서 데이터 추가 및 pop을 함에 빠른 속도로 하기 위하여 첫 노드와 마지막 노드만 저장
-    private var node : SinglyLinkedList? = null
-    private var lastNode : SinglyLinkedList? = null
+    private var node : SinglyLinkedList?
+    private var lastNode : SinglyLinkedList?
     private var cnt = 0 //node의 수
+
+    init{
+        lastNode = null
+        node = null
+        cnt = 0
+    }
 
     //시작 노드를 반환과 동시에 삭제하며 그 다음 노드를 첫 노드로 저장
     fun pop() : Any?{
