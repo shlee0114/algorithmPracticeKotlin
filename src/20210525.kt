@@ -11,7 +11,7 @@ class Fir_20210525{
     //progresses : 잔여 작업률, speeds : 각 작업 별 진행 속도
     fun solution(progresses: IntArray, speeds: IntArray): IntArray {
         val answer = mutableListOf<Int>()
-        val queue = CustomQueue
+        val queue = CustomQueue()
         for(i in progresses){
             queue.push(i)
         }
