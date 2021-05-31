@@ -1,4 +1,6 @@
 import DataStructure.Stack.CustomStack
+import java.util.*
+import kotlin.math.max
 
 class Fir_20210531 {
     //하나의 메소드에 모든 기능이 몰리지 않도록 최대한 중복되는 기능이 있을 시 별도의 메소드를 만들어서 중복성 최소화
@@ -69,10 +71,77 @@ class Fir_20210531 {
     }
 }
 
+class Snd_20210531{
+    private var maxValue = 0
+
+    //프로그래머스 문제 : 프린터
+    //대기열에 중요도가 있어서 현재 사용자가 넣은 문서가 언제 출력되는 지를 구하는 문제
+    //위에 스택으로는 문제가 틀리며, 스택보다는 큐를 사용하는 것이 더 적합하다는 판단으로 큐를 사용
+    //큐를 지속적으로 돌리면서 최대 값이 나오면 새로운 큐에 저장하지 않은 방식으로 위에 스택과 동일하지만 큐를 사용한 부분은 빠진 부분을 제외하고 최대 값을 구하기에 에러가 없다
+    //priorities : 우선순위들
+    //location : 사용자가 지정한 번호
+    fun solution(priorities: IntArray, location: Int): Int {
+        var answer = 0
+
+        var queue : Queue<IntArray> = LinkedList()
+
+        for(i in priorities.indices){
+            queue.add(intArrayOf(priorities[i], i))
+        }
+
+        getMaxVal(queue, queue)
+
+        var tmpQueue : Queue<IntArray> = LinkedList()
+        while (true){
+            queue.poll().apply{
+                if(get(0) >= maxValue){ //추출한 값이 가장 큰 값이면 저장하지 않고 answer값 증가 및 최대 값 다시 산출
+                    getMaxVal(queue, tmpQueue)
+                    answer++
+                    if(get(1) == location)
+                        return answer
+                }else{
+                    tmpQueue.add(this)
+                }
+            }
+
+            if(queue.isEmpty()){
+                if(tmpQueue.isEmpty()){
+                    return answer
+                }
+                queue = tmpQueue
+                tmpQueue = LinkedList()
+            }
+        }
+    }
+
+    //2개로 나눠진 앞 큐와 뒷 큐 값을 전부 확인하면서 최대 값을 구하는 식
+    //queue : 최대 값을 구할 뒷 부분 큐
+    //tmpQueue : 최대 값을 구할 앞 부분 큐
+    private fun getMaxVal(queue:  Queue<IntArray>, tmpQueue: Queue<IntArray>){
+        this.maxValue = 0
+        loopQueueGetMax(queue)
+        loopQueueGetMax(tmpQueue)
+    }
+
+    //같은 식이 두 번이나 반복되어서 하나의 메소드로 구현
+    //queue : 최대 값을 구할 큐
+    private fun loopQueueGetMax(queue:  Queue<IntArray>){
+        if(queue.isNotEmpty()) {
+            for (j in queue) {
+                if (this.maxValue < j[0]) {
+                    this.maxValue = j[0]
+                }
+            }
+        }
+    }
+}
+
 fun main(){
     val fir = Fir_20210531()
-    println(fir.solution(intArrayOf(2, 1, 3, 2), 2))
-    println(fir.solution(intArrayOf(0, 0, 0, 0), 2))
-    println(fir.solution(intArrayOf(9, 3, 1, 11), 2))
-    println(fir.solution(intArrayOf(24,51, 13, 2), 2))
+    val snd = Snd_20210531()
+    println(snd.solution(intArrayOf(2, 1, 3, 2), 2))
+    println(snd.solution(intArrayOf(2, 1, 3, 2), 2))
+    println(snd.solution(intArrayOf(9, 3, 1, 11), 2))
+    println(snd.solution(intArrayOf(24,51, 13, 25, 43, 12, 43, 11, 32), 2))
+    println(snd.solution(intArrayOf(0, 0, 0, 0), 2))
 }
