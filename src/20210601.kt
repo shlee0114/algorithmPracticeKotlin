@@ -1,7 +1,6 @@
 import java.util.*
 
 class Fir_20210601 {
-
     //트럭이 지나가는 시간을 저장한 배열 위치
     val TRUCK_PASSING_TIME = 0
     //트럭의 무게를 저장한 배열의 위치
@@ -22,7 +21,6 @@ class Fir_20210601 {
     //truck_weights : 트럭들의 무게
     fun solution(bridge_length: Int, weight: Int, truck_weights: IntArray): Int {
         val truckOnBridgeQueue : Queue<IntArray> = LinkedList()
-        truck_weights[0]
         var elapsedTime = 1
 
         //데이터 입력없이 들어가면 truckOnBridgeQueue에는 값이 없기에 반복문이 돌지 않는다.
@@ -42,7 +40,6 @@ class Fir_20210601 {
                     addTruckOnBridge(truckOnBridgeQueue, intArrayOf(bridge_length + elapsedTime, truck_weights[nowTruckNum]))
                 }
             }
-
         }
 
         return elapsedTime
@@ -61,5 +58,4 @@ class Fir_20210601 {
 fun main(){
     val fir = Fir_20210601()
     print(fir.solution(2, 10, intArrayOf(7,4,5,6)))
-
 }
