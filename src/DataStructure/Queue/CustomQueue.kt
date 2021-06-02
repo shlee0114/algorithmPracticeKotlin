@@ -1,5 +1,6 @@
 package DataStructure.Queue
 
+import DataStructure.CustomIterator
 import DataStructure.Node.CustomNode
 
 class CustomQueue{
@@ -30,7 +31,7 @@ class CustomQueue{
     //노드를 생성 후 저장한 마지막 노드(lastNode)의 다음 노드를 생성한 노드로 지정 후 lastNode를 생성한 노드로 변경
     //만약 첫 생성일 시 처음 노드(node)에도 저장
     fun push(data : Int){
-        CustomNode(data, null, null).also {
+        CustomNode(data).also {
             if(node == null){
                 node = it
             }else{
@@ -71,7 +72,7 @@ class CustomQueue{
     }
 
     //저장되어있는 노드들을 수열로 만든 후 반환
-    operator fun iterator() : Iterator<CustomNode> = QueueIterator(node!!, lastNode!!)
+    operator fun iterator() : Iterator<CustomNode> = CustomIterator(node!!, lastNode!!)
 
     //비었는 지 안 비었는 지 체크
     fun isEmpty() = node == null
@@ -79,21 +80,6 @@ class CustomQueue{
 
     //노드의 총 수
     fun count() = cnt
-
-    //inner class로 첫 노드와 마지막 노드로 다음 노드가 없을 떄 까지 next를 하여서 수열을 생성한다.
-    private class QueueIterator(val start : CustomNode, val end : CustomNode) : Iterator<CustomNode>{
-        var initVal : CustomNode? = null
-        override fun hasNext(): Boolean = initVal != end
-
-        override fun next(): CustomNode {
-            initVal = if(initVal == null){
-                start
-            }else{
-                initVal?.nextNode
-            }
-            return initVal!!
-        }
-    }
 }
 
 
