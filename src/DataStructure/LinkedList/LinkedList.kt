@@ -12,26 +12,65 @@ class LinkedList(private val dataStructureType : DataStructureDivision = DataStr
     override var cnt: Int = 0
 
     override fun pop(): Any? {
-        setNextNodeAndDeletePrevNode()
-        clearFirstNodeWhenNowNodeIsNull()
-        return nowNode?.nodeValue
-    }
-
-    private fun setNextNodeAndDeletePrevNode(){
-        nowNode = nowNode?.nextNode
-        nowNode?.let{
-            it.prevNode = null
-        }
         cnt--
+        val nowNodeData = nowNode?.nodeValue
+        deleteFirstNodeAndSetSecondNode()
+        clearNodesWhenNowNodeIsNull()
+        return nowNodeData
     }
 
-    private fun clearFirstNodeWhenNowNodeIsNull(){
-        if(nowNode == null)
+    private fun deleteFirstNodeAndSetSecondNode(){
+        nowNode = when(dataStructureType){
+            DataStructureDivision.Queue -> nowNode?.nextNode
+            DataStructureDivision.Stack -> nowNode?.prevNode
+            else -> nowNode?.prevNode
+        }
+        clearFirstNodeRecord()
+    }
+
+    private fun clearFirstNodeRecord(){
+        nowNode?.let{
+            when(dataStructureType){
+                DataStructureDivision.Queue -> it.prevNode = null
+                DataStructureDivision.Stack -> it.nextNode = null
+                else -> it.nextNode = null
+            }
+        }
+    }
+
+    private fun clearNodesWhenNowNodeIsNull(){
+        if(nowNode == null){
             firstNode = null
+            lastNode = null
+        }
     }
 
-    override fun push(node: Any?) {
+    override fun push(data: Any?) {
+        cnt++
+        CustomNode(data,nextNode = nowNode ,prevNode = nowNode).also { node ->
+            setNodeInFirstNode(node)
+            lastNode?.nextNode = node
+            lastNode = node
+            setNodeInNowNode()
+        }
     }
+
+    private fun setNodeInFirstNode(node : CustomNode){
+        if(firstNode == null){
+            firstNode = node
+        }else if(firstNode?.nextNode == null){
+            firstNode?.nextNode = node
+        }
+    }
+
+    private fun setNodeInNowNode(){
+        nowNode = when(dataStructureType){
+            DataStructureDivision.Queue -> firstNode
+            DataStructureDivision.Stack -> lastNode
+            else -> lastNode
+        }
+    }
+
 
     override fun peek(): Any? {
         return nowNode?.nodeValue

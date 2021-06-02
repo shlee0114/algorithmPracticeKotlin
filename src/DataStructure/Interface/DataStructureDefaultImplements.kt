@@ -11,7 +11,7 @@ interface DataStructureDefaultImplements {
     var cnt : Int
 
     fun pop() : Any?
-    fun push(node : Any?)
+    fun push(data : Any?)
     fun peek() : Any?
 
     fun count() = cnt
