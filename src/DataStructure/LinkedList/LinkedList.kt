@@ -5,41 +5,32 @@ import DataStructure.DataStructureDivision
 import DataStructure.Interface.DataStructureDefaultImplements
 import DataStructure.Node.CustomNode
 
-class LinkedList(private val dataStructureType : DataStructureDivision = DataStructureDivision.LinkedList) : DataStructureDefaultImplements {
-    override var firstNode: CustomNode? = null
-    override var nowNode: CustomNode? = null
-    override var lastNode: CustomNode? = null
+//연결리스트 구현
+class LinkedList : DataStructureDefaultImplements {
+    //firstNode는 데이터 검색 lastNode는 데이터 입력에 주로 사용됨
+    override var firstNode: CustomNode? = null //첫 노드
+    override var lastNode: CustomNode? = null //마지막 노드
     override var cnt: Int = 0
 
     override fun pop(): Any? {
         cnt--
-        val nowNodeData = nowNode?.nodeValue
-        deleteFirstNodeAndSetSecondNode()
-        clearNodesWhenNowNodeIsNull()
+        val nowNodeData = lastNode?.nodeValue
+        lastNodeSetPullForward()
+        deallocateNode()
         return nowNodeData
     }
 
-    private fun deleteFirstNodeAndSetSecondNode(){
-        nowNode = when(dataStructureType){
-            DataStructureDivision.Queue -> nowNode?.nextNode
-            DataStructureDivision.Stack -> nowNode?.prevNode
-            else -> nowNode?.prevNode
-        }
-        clearFirstNodeRecord()
-    }
-
-    private fun clearFirstNodeRecord(){
-        nowNode?.let{
-            when(dataStructureType){
-                DataStructureDivision.Queue -> it.prevNode = null
-                DataStructureDivision.Stack -> it.nextNode = null
-                else -> it.nextNode = null
-            }
+    //마지막 노드를 제거하고 마지막 앞에 있는 노드를 마지막 노드로 교체
+    private fun lastNodeSetPullForward(){
+        lastNode = lastNode?.prevNode
+        lastNode?.let {
+            it.nextNode = null
         }
     }
 
-    private fun clearNodesWhenNowNodeIsNull(){
-        if(nowNode == null){
+    //총 개수가 0개이면 전부 값 할당 해제
+    private fun deallocateNode(){
+        if(cnt == 0){
             firstNode = null
             lastNode = null
         }
@@ -47,44 +38,41 @@ class LinkedList(private val dataStructureType : DataStructureDivision = DataStr
 
     override fun push(data: Any?) {
         cnt++
-        CustomNode(data,nextNode = nowNode ,prevNode = nowNode).also { node ->
-            setNodeInFirstNode(node)
+        CustomNode(data,nextNode = null ,prevNode = lastNode).also { node ->
             lastNode?.nextNode = node
             lastNode = node
-            setNodeInNowNode()
+            if(firstNode == null)
+                firstNode = node
         }
     }
 
-    private fun setNodeInFirstNode(node : CustomNode){
-        if(firstNode == null){
-            firstNode = node
-        }else if(firstNode?.nextNode == null){
-            firstNode?.nextNode = node
-        }
-    }
-
-    private fun setNodeInNowNode(){
-        nowNode = when(dataStructureType){
-            DataStructureDivision.Queue -> firstNode
-            DataStructureDivision.Stack -> lastNode
-            else -> lastNode
-        }
-    }
-
-
+    //pop과 동일하지만 데이터 삭제는 하지 않음
     override fun peek(): Any? {
-        return nowNode?.nodeValue
+        return lastNode?.nodeValue
     }
 
-    override fun get(index: Int): CustomNode? {
-        return firstNode
+    override fun get(index: Int): Any? {
+        if(index >= cnt)
+            return null
+        return firstNode.getNodeUntilReachIndex(index)?.nodeValue
     }
 
-    override fun set(index: Int, value: Int) {
+    override fun set(index: Int, value: Any) {
+        when {
+            index > cnt -> return
+            index == cnt -> push(value)
+            else -> firstNode.getNodeUntilReachIndex(index)?.nodeValue = value
+        }
+    }
 
+    //재귀사용 index가 0이 될때까지 nextNode를 해주며 0이 되면 해당 nextNode를 반환한다
+    private fun CustomNode?.getNodeUntilReachIndex(index : Int) : CustomNode?{
+        return if(index == 0){
+            this
+        } else{
+            this?.nextNode?.getNodeUntilReachIndex(index-1)
+        }
     }
 
     override fun iterator(): Iterator<CustomNode> = CustomIterator(firstNode!!, lastNode!!)
-
-
 }

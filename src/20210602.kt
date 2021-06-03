@@ -4,27 +4,38 @@ import DataStructure.DataStructureDivision
 import DataStructure.LinkedList.LinkedList
 
 fun main(){
-    val stackTest = LinkedList(DataStructureDivision.Stack)
-    val queueTest = LinkedList(DataStructureDivision.Queue)
+    val test = LinkedList()
 
-    stackTest.push(10)
-    stackTest.push(12)
-    stackTest.push(15)
-    stackTest.push(17)
-    stackTest.push(22)
-    queueTest.push(5)
-    queueTest.push(25)
-    queueTest.push(28)
-    queueTest.push(12)
+    test.push(10)
+    test.push(12)
+    test.push(15)
+    test.push(17)
+    test.push(22)
+    test.push(5)
+    test.push(25)
+    test.push(28)
+    test.push(12)
 
-    println(stackTest.pop())
-    println(stackTest.pop())
-    println(stackTest.pop())
-    println(stackTest.pop())
-    println(stackTest.pop())
-    println(queueTest.pop())
-    println(queueTest.pop())
-    println(queueTest.pop())
-    println(queueTest.pop())
+    for(i in test){
+        println(i.nodeValue)
+    }
+
+    println()
+    println(test.pop())
+    println(test.pop())
+    println(test.pop())
+    println(test.pop())
+    println(test.pop())
+    println(test.pop())
+    println()
+    test[0] = 100
+    test[2] = 411
+    test[3] = 411
+    test[4] = 411
+    println(test[0])
+    println(test[1])
+    println(test[2])
+    println(test[3])
+    println(test[4])
 
 }
