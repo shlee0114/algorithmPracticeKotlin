@@ -12,7 +12,7 @@ class LinkedList : DataStructureDefaultImplements {
     override var lastNode: CustomNode? = null //마지막 노드
     override var cnt: Int = 0
 
-    override fun pop(): Any? {
+    override fun poll(): Any? {
         cnt--
         val nowNodeData = lastNode?.nodeValue
         lastNodeSetPullForward()
@@ -36,7 +36,7 @@ class LinkedList : DataStructureDefaultImplements {
         }
     }
 
-    override fun push(data: Any?) {
+    override fun offer(data: Any?) {
         cnt++
         CustomNode(data,nextNode = null ,prevNode = lastNode).also { node ->
             lastNode?.nextNode = node
@@ -54,23 +54,23 @@ class LinkedList : DataStructureDefaultImplements {
     override fun get(index: Int): Any? {
         if(index >= cnt)
             return null
-        return firstNode.getNodeUntilReachIndex(index)?.nodeValue
+        return firstNode.getNodeUntilReachNextIndex(index)?.nodeValue
     }
 
     override fun set(index: Int, value: Any) {
         when {
             index > cnt -> return
-            index == cnt -> push(value)
-            else -> firstNode.getNodeUntilReachIndex(index)?.nodeValue = value
+            index == cnt -> offer(value)
+            else -> firstNode.getNodeUntilReachNextIndex(index)?.nodeValue = value
         }
     }
 
     //재귀사용 index가 0이 될때까지 nextNode를 해주며 0이 되면 해당 nextNode를 반환한다
-    private fun CustomNode?.getNodeUntilReachIndex(index : Int) : CustomNode?{
+    private fun CustomNode?.getNodeUntilReachNextIndex(index : Int) : CustomNode?{
         return if(index == 0){
             this
         } else{
-            this?.nextNode?.getNodeUntilReachIndex(index-1)
+            this?.nextNode?.getNodeUntilReachNextIndex(index-1)
         }
     }
 

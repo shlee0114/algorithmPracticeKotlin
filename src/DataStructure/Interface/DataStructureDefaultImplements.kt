@@ -9,8 +9,8 @@ interface DataStructureDefaultImplements {
     var lastNode : CustomNode?
     var cnt : Int
 
-    fun pop() : Any?
-    fun push(data : Any?)
+    fun poll() : Any?
+    fun offer(data : Any?)
     fun peek() : Any?
 
     fun count() = cnt
