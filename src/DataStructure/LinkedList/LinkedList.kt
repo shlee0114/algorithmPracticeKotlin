@@ -74,5 +74,5 @@ class LinkedList : DataStructureDefaultImplements {
         }
     }
 
-    override fun iterator(): Iterator<CustomNode> = CustomIterator(firstNode!!, lastNode!!)
+    override fun iterator(): Iterator<CustomNode> = CustomIterator(firstNode, lastNode)
 }
