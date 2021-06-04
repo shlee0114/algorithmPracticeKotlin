@@ -1,12 +1,11 @@
 package DataStructure.LinkedList
 
 import DataStructure.CustomIterator
-import DataStructure.DataStructureDivision
 import DataStructure.Interface.DataStructureDefaultImplements
 import DataStructure.Node.CustomNode
 
 //연결리스트 구현
-class LinkedList : DataStructureDefaultImplements {
+open class LinkedList : DataStructureDefaultImplements {
     //firstNode는 데이터 검색 lastNode는 데이터 입력에 주로 사용됨
     override var firstNode: CustomNode? = null //첫 노드
     override var lastNode: CustomNode? = null //마지막 노드
@@ -29,7 +28,7 @@ class LinkedList : DataStructureDefaultImplements {
     }
 
     //총 개수가 0개이면 전부 값 할당 해제
-    private fun deallocateNode(){
+    protected fun deallocateNode(){
         if(cnt == 0){
             firstNode = null
             lastNode = null
