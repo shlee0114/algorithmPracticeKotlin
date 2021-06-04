@@ -12,6 +12,7 @@ interface DataStructureDefaultImplements {
     fun poll() : Any?
     fun offer(data : Any?)
     fun peek() : Any?
+    fun remove(index : Int)
 
     fun count() = cnt
 

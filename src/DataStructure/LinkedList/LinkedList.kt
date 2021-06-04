@@ -51,6 +51,24 @@ class LinkedList : DataStructureDefaultImplements {
         return lastNode?.nodeValue
     }
 
+    override fun remove(index: Int) {
+        when{
+            index >= cnt -> return
+            index +1 == cnt -> poll()
+            else ->
+                firstNode.getNodeUntilReachNextIndex(index)?.apply {
+                    nextNode?.prevNode = prevNode
+                    if(prevNode == null){
+                        firstNode = nextNode
+                    }else{
+                        prevNode?.nextNode = nextNode
+                    }
+            }
+        }
+        cnt--
+        deallocateNode()
+    }
+
     override fun get(index: Int): Any? {
         if(index >= cnt)
             return null
