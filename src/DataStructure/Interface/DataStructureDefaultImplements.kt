@@ -27,7 +27,7 @@ interface DataStructureDefaultImplements {
     operator fun set(index: Int, value : Any)
 
     //저장되어있는 노드들을 수열로 만든 후 반환
-    operator fun iterator() : Iterator<CustomNode>
+    operator fun iterator() : Iterator<Any?>
 
 
 }
