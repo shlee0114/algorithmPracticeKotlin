@@ -3,9 +3,10 @@ package DataStructure.LinkedList
 import DataStructure.CustomIterator
 import DataStructure.Interface.DataStructureDefaultImplements
 import DataStructure.Node.CustomNode
+import FunctionModules.FunctionModules.DataStructureRelated
 
 //연결리스트 구현
-open class LinkedList : DataStructureDefaultImplements {
+open class LinkedList : DataStructureRelated(), DataStructureDefaultImplements{
     //firstNode는 데이터 검색 lastNode는 데이터 입력에 주로 사용됨
     override var firstNode: CustomNode? = null //첫 노드
     override var lastNode: CustomNode? = null //마지막 노드
@@ -38,7 +39,7 @@ open class LinkedList : DataStructureDefaultImplements {
     override fun offer(data: Any?) {
         cnt++
         CustomNode(data,nextNode = null ,prevNode = lastNode).also { node ->
-            lastNode?.nextNode = node
+            node.giveLeftToRightPrevNode(lastNode)
             lastNode = node
             if(firstNode == null)
                 firstNode = node
@@ -56,11 +57,11 @@ open class LinkedList : DataStructureDefaultImplements {
             index +1 == cnt -> poll()
             else ->
                 firstNode.getNodeUntilReachNextIndex(index)?.apply {
-                    nextNode?.prevNode = prevNode
+                    prevNode.giveLeftToRightPrevNode(nextNode)
                     if(prevNode == null){
                         firstNode = nextNode
                     }else{
-                        prevNode?.nextNode = nextNode
+                        nextNode.giveLeftToRightNextNode(prevNode)
                     }
             }
         }
@@ -79,15 +80,6 @@ open class LinkedList : DataStructureDefaultImplements {
             index > cnt -> return
             index == cnt -> offer(value)
             else -> firstNode.getNodeUntilReachNextIndex(index)?.nodeValue = value
-        }
-    }
-
-    //재귀사용 index가 0이 될때까지 nextNode를 해주며 0이 되면 해당 nextNode를 반환한다
-    private fun CustomNode?.getNodeUntilReachNextIndex(index : Int) : CustomNode?{
-        return if(index == 0){
-            this
-        } else{
-            this?.nextNode?.getNodeUntilReachNextIndex(index-1)
         }
     }
 
