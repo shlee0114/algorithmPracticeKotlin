@@ -1,16 +1,42 @@
 package DataStructure.Queue
 
+import DataStructure.Interface.DataStructureDefaultImplements
 import DataStructure.LinkedList.LinkedList
+import DataStructure.Node.CustomNode
 
-class CustomQueue : LinkedList() {
+class CustomQueue: DataStructureDefaultImplements {
+    //firstNode는 데이터 검색 lastNode는 데이터 입력에 주로 사용됨
+    override var firstNode: CustomNode? = null //첫 노드
+    override var lastNode: CustomNode? = null //마지막 노드
+    override var cnt: Int = 0
 
-    //전체적인 부분은 LinkedList와 비슷하나 poll과정에서 큐는 FIFO LinkedList는 LIFO이기에 poll만 교체
-    override fun poll(): Any? {
-        cnt--
-        val nowNodeData = firstNode?.nodeValue
-        firstNode = firstNode?.nextNode
-        deallocateNode()
-        return nowNodeData
+    fun offer(data : Any?){
+
+    }
+
+    fun poll() : Any?{
+        return lastNode
+    }
+
+    override fun peek() : Any? {
+        return lastNode
+    }
+
+
+    override fun remove(index: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun get(index: Int): Any? {
+        TODO("Not yet implemented")
+    }
+
+    override fun set(index: Int, value: Any) {
+        TODO("Not yet implemented")
+    }
+
+    override fun iterator(): Iterator<Any?> {
+        TODO("Not yet implemented")
     }
 
 }

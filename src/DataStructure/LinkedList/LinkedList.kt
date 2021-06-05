@@ -12,9 +12,9 @@ open class LinkedList : DataStructureRelated(), DataStructureDefaultImplements{
     override var lastNode: CustomNode? = null //마지막 노드
     override var cnt: Int = 0
 
-    override fun poll(): Any? {
+    fun poll(): Any? {
         cnt--
-        val nowNodeData = lastNode?.nodeValue
+        val nowNodeData = peek()
         lastNodeSetPullForward()
         deallocateNode()
         return nowNodeData
@@ -29,14 +29,14 @@ open class LinkedList : DataStructureRelated(), DataStructureDefaultImplements{
     }
 
     //총 개수가 0개이면 전부 값 할당 해제
-    protected fun deallocateNode(){
+    private fun deallocateNode(){
         if(cnt == 0){
             firstNode = null
             lastNode = null
         }
     }
 
-    override fun offer(data: Any?) {
+    fun offer(data: Any?) {
         cnt++
         CustomNode(data,nextNode = null ,prevNode = lastNode).also { node ->
             node.giveLeftToRightPrevNode(lastNode)
@@ -47,9 +47,7 @@ open class LinkedList : DataStructureRelated(), DataStructureDefaultImplements{
     }
 
     //pop과 동일하지만 데이터 삭제는 하지 않음
-    override fun peek(): Any? {
-        return lastNode?.nodeValue
-    }
+    override fun peek(): Any? = lastNode?.nodeValue
 
     override fun remove(index: Int) {
         when{

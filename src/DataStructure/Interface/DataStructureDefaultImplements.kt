@@ -9,8 +9,6 @@ interface DataStructureDefaultImplements {
     var lastNode : CustomNode?
     var cnt : Int
 
-    fun poll() : Any?
-    fun offer(data : Any?)
     fun peek() : Any?
     fun remove(index : Int)
 
