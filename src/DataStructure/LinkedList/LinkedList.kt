@@ -1,16 +1,11 @@
 package DataStructure.LinkedList
 
 import DataStructure.CustomIterator
-import DataStructure.Interface.DataStructureDefaultImplements
 import DataStructure.Node.CustomNode
-import FunctionModules.FunctionModules.DataStructureRelated
-
+import FunctionModules.DataStructure.Node.NodeFunction
 //연결리스트 구현
-open class LinkedList : DataStructureRelated(), DataStructureDefaultImplements{
+open class LinkedList : NodeFunction(){
     //firstNode는 데이터 검색 lastNode는 데이터 입력에 주로 사용됨
-    override var firstNode: CustomNode? = null //첫 노드
-    override var lastNode: CustomNode? = null //마지막 노드
-    override var cnt: Int = 0
 
     fun poll(): Any? {
         cnt--
@@ -20,30 +15,18 @@ open class LinkedList : DataStructureRelated(), DataStructureDefaultImplements{
         return nowNodeData
     }
 
-    //마지막 노드를 제거하고 마지막 앞에 있는 노드를 마지막 노드로 교체
-    private fun lastNodeSetPullForward(){
-        lastNode = lastNode?.prevNode
-        lastNode?.let {
-            it.nextNode = null
-        }
-    }
-
-    //총 개수가 0개이면 전부 값 할당 해제
-    private fun deallocateNode(){
-        if(cnt == 0){
-            firstNode = null
-            lastNode = null
-        }
-    }
 
     fun offer(data: Any?) {
         cnt++
         CustomNode(data,nextNode = null ,prevNode = lastNode).also { node ->
-            node.giveLeftToRightPrevNode(lastNode)
+            node.giveLeftToRightNextNode(lastNode)
             lastNode = node
-            if(firstNode == null)
-                firstNode = node
+            insertNodeWhenFirstNodeIsNull(node)
         }
+    }
+
+    fun add(data : Any?){
+        offer(data)
     }
 
     //pop과 동일하지만 데이터 삭제는 하지 않음
