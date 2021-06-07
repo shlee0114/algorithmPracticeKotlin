@@ -8,22 +8,27 @@ abstract class NodeFunction : DataStructureDefaultImplements {
     override var firstNode: CustomNode? = null //첫 노드
     override var lastNode: CustomNode? = null //마지막 노드
     override var cnt: Int = 0
+    override var first: Any? = null //첫 노드의 값
+    override var last: Any? = null  //마지막 노드의 값
 
-    protected fun linkedAndStackPoll(): Any? {
-        cnt--
-        val nowNodeData = peek()
-        lastNodeSetPullForward()
-        deallocateNode()
-        return nowNodeData
-    }
 
-    protected fun linkedAndStackOffer(data: Any?) {
+    protected fun offerData(data: Any?) {
         cnt++
         CustomNode(data,nextNode = null ,prevNode = lastNode).also { node ->
             node.giveLeftToRightNextNode(lastNode)
-            lastNode = node
+            insertLastNode(node)
             insertNodeInFirstNodeWhenIsNull(node)
         }
+    }
+
+    private fun insertLastNode(node: CustomNode?){
+        lastNode = node
+        last = node?.nodeValue
+    }
+
+    private fun insertFirstNode(node: CustomNode?){
+        firstNode = node
+        first = node?.nodeValue
     }
 
     //마지막 노드를 제거하고 마지막 앞에 있는 노드를 마지막 노드로 교체
@@ -37,25 +42,27 @@ abstract class NodeFunction : DataStructureDefaultImplements {
     protected fun firstNodeSetPullBackward(){
         firstNode = firstNode?.nextNode
         firstNode?.let {
-            it.nextNode = null
+            it.prevNode = null
         }
     }
 
-    protected fun insertNodeInFirstNodeWhenIsNull(node : CustomNode?){
-        if(firstNode == null)
-            firstNode = node
+    private fun insertNodeInFirstNodeWhenIsNull(node : CustomNode?){
+        if(firstNode == null){
+            insertFirstNode(node)
+        }
     }
 
     protected fun insertNodeInLastNodeWhenIsNull(node : CustomNode?){
-        if(lastNode == null)
-            lastNode = node
+        if(lastNode == null){
+            insertLastNode(node)
+        }
     }
 
     //총 개수가 0개이면 전부 값 할당 해제
     protected fun deallocateNode(){
         if(cnt == 0){
-            firstNode = null
-            lastNode = null
+            insertFirstNode(null)
+            insertLastNode(null)
         }
     }
 
@@ -85,17 +92,17 @@ abstract class NodeFunction : DataStructureDefaultImplements {
         }
     }
 
-    protected fun linkedAndStackGet(index : Int) : Any?{
+    override fun get(index: Int) : Any? {
         if(index >= cnt)
             return null
         return firstNode.getNodeUntilReachNextIndex(index)?.nodeValue
     }
 
-    protected fun linkedAndStackSet(index : Int, data : Any?){
+    override fun set(index: Int, data: Any) {
         if(index < cnt){
             firstNode.getNodeUntilReachNextIndex(index)?.nodeValue = data
         }else if(index == cnt){
-            linkedAndStackOffer(data)
+            offerData(data)
         }
     }
 }

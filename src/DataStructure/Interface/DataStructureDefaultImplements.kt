@@ -8,6 +8,8 @@ interface DataStructureDefaultImplements {
     var firstNode : CustomNode?
     var lastNode : CustomNode?
     var cnt : Int
+    var first : Any?
+    var last : Any?
 
     fun peek() : Any?
 
