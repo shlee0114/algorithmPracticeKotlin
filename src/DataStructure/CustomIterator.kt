@@ -5,12 +5,13 @@ import DataStructure.Node.CustomNode
 class CustomIterator(private val start : CustomNode?) : Iterator<Any?>{
     private var initVal : CustomNode? = null
     override fun hasNext(): Boolean {
-        if(start == null){
-            return false
+        return if(start == null){
+             false
         }else{
             if(initVal == null)
-                return true
-            return initVal?.nextNode != null
+                true
+            else
+                initVal?.nextNode != null
         }
     }
 
