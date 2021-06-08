@@ -1,7 +1,6 @@
 package DataStructure
 
 import DataStructure.Node.CustomNode
-import FunctionModules.DataStructure.DataStructureType
 
 class CustomIterator(private val start : CustomNode?) : Iterator<Any?>{
     private var initVal : CustomNode? = null

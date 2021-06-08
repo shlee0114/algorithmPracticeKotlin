@@ -1,16 +1,15 @@
 package FunctionModules.DataStructure.Node
 
 import DataStructure.CustomIterator
-import DataStructure.Interface.DataStructureDefaultImplements
 import DataStructure.Node.CustomNode
 
-abstract class NodeFunction : DataStructureDefaultImplements {
+abstract class NodeFunction {
     //firstNode는 데이터 검색 lastNode는 데이터 입력에 주로 사용됨
-    override var firstNode: CustomNode? = null //첫 노드
-    override var lastNode: CustomNode? = null //마지막 노드
-    override var cnt: Int = 0
-    override var first: Any? = null //첫 노드의 값
-    override var last: Any? = null  //마지막 노드의 값
+    var firstNode: CustomNode? = null //첫 노드
+    var lastNode: CustomNode? = null //마지막 노드
+    var cnt: Int = 0
+    var first: Any? = null //첫 노드의 값
+    var last: Any? = null  //마지막 노드의 값
 
     protected fun offerData(data : Any?){
         cnt++
@@ -77,16 +76,18 @@ abstract class NodeFunction : DataStructureDefaultImplements {
         }
     }
 
-    override fun iterator(): Iterator<Any?> = CustomIterator(firstNode)
+    abstract fun peek() : Any?
+
+    operator fun iterator(): Iterator<Any?> = CustomIterator(firstNode)
 
 
-    override fun get(index: Int) : Any? {
+    operator fun get(index: Int) : Any? {
         if(index >= cnt)
             return null
         return firstNode.getNodeUntilReachNextIndex(index)?.nodeValue
     }
 
-    override fun set(index: Int, data: Any) {
+    operator fun set(index: Int, data: Any) {
         if(index < cnt){
             firstNode.getNodeUntilReachNextIndex(index)?.nodeValue = data
         }else if(index == cnt){
