@@ -8,8 +8,11 @@ class CustomIterator(private val start : CustomNode?) : Iterator<Any?>{
     override fun hasNext(): Boolean {
         if(start == null){
             return false
+        }else{
+            if(initVal == null)
+                return true
+            return initVal?.nextNode != null
         }
-        return initVal?.nextNode == null
     }
 
     override fun next(): Any? {
