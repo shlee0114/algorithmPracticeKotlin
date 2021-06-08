@@ -1,16 +1,22 @@
 package DataStructure.Stack
 
-import DataStructure.LinkedList.LinkedList
-import DataStructure.Node.CustomNode
 import FunctionModules.DataStructure.Node.NodeFunction
 
 class CustomStack : NodeFunction(){
 
-    override fun peek(): Any? {
-        TODO("Not yet implemented")
+    fun push(data : Any?){
+        offerData(data)
     }
 
-    override fun iterator(): Iterator<Any?> {
-        TODO("Not yet implemented")
+    fun pop() : Any?{
+        val data = peek()
+        remove()
+        return data
     }
+
+    fun remove(){
+        lastNodeSetPullForward()
+    }
+
+    override fun peek() = last
 }
