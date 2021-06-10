@@ -13,22 +13,22 @@ class Fir_20210525{
         val answer = mutableListOf<Int>()
         val queue = CustomQueue()
         for(i in progresses){
-            queue.push(i)
+            queue.offer(i)
         }
 
         //?.을 사용 시 null이 발생 시 대처 가능
         while (queue.isNotEmpty()){
             var outCnt = 0
-            for(i in 0 until queue.count()){
-                queue[i]!! += speeds[i]//queue[i]?.plusAssign(speeds[i])과 동일
+            for(i in 0 until queue.cnt){
+                queue[i] = speeds[i] + queue[i] as Int//queue[i]?.plusAssign(speeds[i])과 동일
             }
-            if(queue.peek()!! >= 100){ // queue[0]?.compareTo(100) >= 0과 동일
+            if((queue.peek()!!) as Int >= 100){ // queue[0]?.compareTo(100) >= 0과 동일
                 while (queue.isNotEmpty()){
-                    queue.pop()
+                    queue.poll()
                     outCnt++
                     if(queue.isEmpty())
                         break
-                    if(queue.peek()!! < 100)// queue[0]?.compareTo(100) == -1과 동일
+                    if((queue.peek()!! as Int) < 100)// queue[0]?.compareTo(100) == -1과 동일
                         break
                 }
                 answer.add(outCnt)
@@ -44,7 +44,7 @@ class Fir_20210525{
       초기 지정 값은 tmp[0]으로 설정한 후 tmp[0]보다 큰 값이 나올 시 지정 값 변경과 지금까지의 수를 answer에 저장한다 */
    fun programmersSolution(progresses: IntArray, speeds: IntArray): IntArray {
         val answer = mutableListOf<Int>()
-        var tmp = mutableListOf<Int>()
+        val tmp = mutableListOf<Int>()
 
         for(i in progresses.indices){
             if(progresses[i] >= 100) { //100이 넘을 시 연산의 필요가 없기에 문제 방지를 위해 0입력

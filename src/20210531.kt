@@ -37,7 +37,6 @@ class Fir_20210531 {
                 tmpStack = CustomStack()
             }
         }
-        return answer
     }
 
     //넣는 데이터가 최대 값인지 확인 후 데이터를 넣고 만약 최대 값이고 사용자가 원하는 위치라면 true로 반환
@@ -71,8 +70,8 @@ class Fir_20210531 {
     private fun loopStackGetMax(stack:  CustomStack){
         if(stack.isNotEmpty()) {
             for (j in stack) {
-                if (this.maxVal < (j.value as IntArray)[0]) {
-                    this.maxVal = (j.value as IntArray)[0]
+                if (this.maxVal < (j as IntArray)[0]) {
+                    this.maxVal = j[0]
                 }
             }
         }
@@ -152,4 +151,7 @@ fun main(){
     println(fir.solution(intArrayOf(9, 3, 1, 11), 2))
     println(fir.solution(intArrayOf(24,51, 13, 25, 43, 12, 43, 11, 32), 2))
     println(fir.solution(intArrayOf(0, 0, 0, 0), 2))
+    println(snd.solution(intArrayOf(9, 3, 1, 11), 2))
+    println(snd.solution(intArrayOf(24,51, 13, 25, 43, 12, 43, 11, 32), 2))
+    println(snd.solution(intArrayOf(0, 0, 0, 0), 2))
 }

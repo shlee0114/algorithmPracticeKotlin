@@ -76,10 +76,13 @@ abstract class NodeFunction {
         }
     }
 
+    fun isEmpty() = firstNode == null
+
+    fun isNotEmpty() = firstNode != null
+
     abstract fun peek() : Any?
 
     operator fun iterator(): Iterator<Any?> = CustomIterator(firstNode)
-
 
     operator fun get(index: Int) : Any? {
         if(index >= cnt)
