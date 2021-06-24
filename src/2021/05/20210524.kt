@@ -5,7 +5,7 @@ class Fir_20210524{
     //clothes : 옷의 종류와 옷의 이름이 배열로 들어가 있는 배열
     fun solution(clothes: Array<Array<String>>) : Int{
         var answer = 1
-        var map = mutableMapOf<String, Int>()
+        val map = mutableMapOf<String, Int>()
         for(i in clothes){
             map[i[1]] =
             if(map[i[1]] == null){
@@ -15,7 +15,7 @@ class Fir_20210524{
                 map[i[1]]!! + 1
             }
         }
-        map.forEach { (t, u) ->  answer *= u}
+        map.forEach { (_, u) ->  answer *= u}
         return answer - 1
     }
 }
@@ -48,9 +48,9 @@ class Snd_20210524{
         key = maxVal.keys
         for(i in key){
             val tmpKey = value[i]?.keys ?: continue
-            answer.add(tmpKey?.elementAt(0))
-            if(tmpKey?.size != 1){
-                answer.add(tmpKey?.elementAt(1))
+            answer.add(tmpKey.elementAt(0))
+            if(tmpKey.size != 1){
+                answer.add(tmpKey.elementAt(1))
             }
         }
         return answer.toIntArray()
