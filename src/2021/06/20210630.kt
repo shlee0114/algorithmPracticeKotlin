@@ -85,9 +85,113 @@ class Snd_20210630{
     }
 }
 
+class Thr_20210630{
+
+    //프로그래머스 문제 : 단어 변환
+    //시작 단어를 최종 목표 단어까지 변환하는데 걸리는 단계
+    //주어진 단어로만 변할 수 있으며, 한 번에 한 단어 씩 변환이 가능하다
+
+    var targetText = ""
+    var wordList = arrayOf<String>()
+    var maxStep = 0
+
+    fun solution(begin: String, target: String, words: Array<String>): Int {
+        targetText = target
+        wordList = words
+        maxStep = wordList.size + 1
+        textTranslator(begin, 0)
+        if(maxStep == wordList.size + 1)
+            maxStep = 0
+        return maxStep
+    }
+
+    private fun textTranslator(word : String, count : Int){
+        if(maxStep < count){
+            return
+        }
+        //가장 짧은 단계를 구하는 것이기에 답이 나온 단계 이상은 필요가 없으므로, maxStep을 변경한다.
+        if(word == targetText){
+            maxStep = count
+            return
+        }
+
+        for(i in wordList){
+            if(i != word)
+                if(isChangeOneWord(word, i)){
+                    textTranslator(i, count + 1)
+                }
+        }
+    }
+
+    //한 단어만 변경되었는 지 확인하는 모듈
+    private fun isChangeOneWord(word : String, toWord : String) : Boolean{
+        var changedCount = 0
+        val toWordChar = toWord.toCharArray()
+        val wordChar = word.toCharArray()
+        for(i in wordChar.indices){
+            if(wordChar[i] != toWordChar[i])
+                changedCount++
+            if(changedCount == 2)
+                return false
+        }
+        return true
+    }
+}
+
+
+class fth_20210630{
+    var tickets = arrayOf<Array<String>>()
+    var answer = arrayOf<String>()
+    fun solution(tickets: Array<Array<String>>): Array<String> {
+        this.tickets = tickets
+        for(i in tickets.indices){
+            val availableTicket = BooleanArray(tickets.size){true}
+            val alreadyGone = ArrayList<Int>()
+            val root = ArrayList<String>()
+            root.add(tickets[i][0])
+            alreadyGone.add(i)
+            availableTicket[i] = false
+            ticketsTracking(availableTicket, tickets[i][1], alreadyGone, root)
+        }
+        return answer
+    }
+
+    private fun ticketsTracking(availableTicket : BooleanArray, nowLocation : String, alreadyGone : ArrayList<Int>, root : ArrayList<String>){
+        if(!availableTicket.contains(true)){
+            root.toArray()
+            return
+        }
+        val ableToGo = ArrayList<String>()
+        for(i in tickets.indices){
+            if(availableTicket[i] && !alreadyGone.contains(i) && tickets[i][0] == nowLocation){
+                ableToGo.add("${tickets[i][1]}_$i")
+            }
+        }
+
+        if(ableToGo.isEmpty())
+            return
+
+        ableToGo.sortDescending()
+        for(i in ableToGo){
+            val index = i.split("_")[1].toInt()
+            alreadyGone.add(index)
+            availableTicket[index] = false
+            root.add(i.split("_")[0])
+            ticketsTracking(availableTicket, i.split("_")[0], alreadyGone, root)
+            availableTicket[index] = true
+            alreadyGone.remove(index)
+            root.removeAt(root.size - 1)
+        }
+    }
+}
+
 fun main(){
-    val test = Fir_20210630()
-    println(test.solution(intArrayOf(1, 1, 1, 1, 1), 3))
-    val test2 = Snd_20210630()
-    println(test2.solution(1, arrayOf(intArrayOf(1))))
+    //val test = Fir_20210630()
+    //println(test.solution(intArrayOf(1, 1, 1, 1, 1), 3))
+    //val test2 = Snd_20210630()
+    //println(test2.solution(1, arrayOf(intArrayOf(1))))
+    //val test3 = Thr_20210630()
+    //println(test3.solution("hit", "cog", arrayOf("hot", "dot", "dog", "lot", "log", "cog")))
+    val test4 = fth_20210630()
+    println(test4.solution(arrayOf(arrayOf("ICN", "SFO"), arrayOf("ICN", "ATL"), arrayOf("SFO", "ATL"), arrayOf("ATL", "ICN"), arrayOf("ATL","SFO"))))
 }
