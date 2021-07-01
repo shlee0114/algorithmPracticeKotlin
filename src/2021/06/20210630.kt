@@ -140,46 +140,66 @@ class Thr_20210630{
 
 
 class fth_20210630{
-    var tickets = arrayOf<Array<String>>()
-    var answer = arrayOf<String>()
+
+    //프로그래머스 문제 : 여행경로
+    //배열 내부에 2개의 String으로 이루어진 배열이 있으며 ICN부터 시작해서 모든 1번과 0번이 일치하는 것을 따라가면서 모든 배열을 돌 수 있는 경로 중 알파벳 순으로 간 것을 출력
+
+    private var tickets = arrayOf<Array<String>>()
+    private var answer: Array<String>? = null
+
+    private val START_LOCATION = "ICN"
+
+    private val STARTING_POINT = 0
+    private val ARRIVAL_POINT = 1
+
+
     fun solution(tickets: Array<Array<String>>): Array<String> {
+        tickets.sortBy { it.first() + it.last() } //알파벳 순이 되도록 정렬
         this.tickets = tickets
         for(i in tickets.indices){
-            val availableTicket = BooleanArray(tickets.size){true}
-            val alreadyGone = ArrayList<Int>()
-            val root = ArrayList<String>()
-            root.add(tickets[i][0])
-            alreadyGone.add(i)
-            availableTicket[i] = false
-            ticketsTracking(availableTicket, tickets[i][1], alreadyGone, root)
+            if(tickets[i][STARTING_POINT] == START_LOCATION){
+
+                val availableTicket = BooleanArray(tickets.size){true}
+                val alreadyGone = arrayListOf(i)
+                val root = generateRoot(tickets[i][ARRIVAL_POINT])
+
+                availableTicket[i] = false
+                ticketsTracking(availableTicket, tickets[i][ARRIVAL_POINT], alreadyGone, root)
+            }
         }
-        return answer
+        return answer!!
     }
 
+    //초기 출발지는 ICN으로 고정이므로 ICN과 그 다음 지역을 배열의 초기값으로 반환
+    private fun generateRoot(firstRoot : String) = arrayListOf("ICN", firstRoot)
+
+    //현재 위치와 갈 수 있는 곳을 산정 후 모든 지역을 돌면 바로 반환한다.
     private fun ticketsTracking(availableTicket : BooleanArray, nowLocation : String, alreadyGone : ArrayList<Int>, root : ArrayList<String>){
+        if(answer != null)
+            return
         if(!availableTicket.contains(true)){
-            root.toArray()
+            answer = root.toTypedArray()
             return
         }
         val ableToGo = ArrayList<String>()
         for(i in tickets.indices){
             if(availableTicket[i] && !alreadyGone.contains(i) && tickets[i][0] == nowLocation){
-                ableToGo.add("${tickets[i][1]}_$i")
+                ableToGo.add("${tickets[i][ARRIVAL_POINT]}_$i")
             }
         }
 
         if(ableToGo.isEmpty())
             return
 
-        ableToGo.sortDescending()
         for(i in ableToGo){
             val index = i.split("_")[1].toInt()
+            val location = i.split("_")[0]
             alreadyGone.add(index)
             availableTicket[index] = false
-            root.add(i.split("_")[0])
-            ticketsTracking(availableTicket, i.split("_")[0], alreadyGone, root)
-            availableTicket[index] = true
+            root.add(location)
+            ticketsTracking(availableTicket, location, alreadyGone, root)
             alreadyGone.remove(index)
+            availableTicket[index] = true
             root.removeAt(root.size - 1)
         }
     }
@@ -193,5 +213,5 @@ fun main(){
     //val test3 = Thr_20210630()
     //println(test3.solution("hit", "cog", arrayOf("hot", "dot", "dog", "lot", "log", "cog")))
     val test4 = fth_20210630()
-    println(test4.solution(arrayOf(arrayOf("ICN", "SFO"), arrayOf("ICN", "ATL"), arrayOf("SFO", "ATL"), arrayOf("ATL", "ICN"), arrayOf("ATL","SFO"))))
+    println(test4.solution(arrayOf(arrayOf("ICN", "BOO"), arrayOf("ICN", "COO"), arrayOf("COO", "DOO"), arrayOf("DOO", "COO"), arrayOf("BOO", "DOO"), arrayOf("DOO", "BOO"), arrayOf("BOO", "ICN"), arrayOf("COO", "BOO"))))
 }
