@@ -146,6 +146,44 @@ class Trd_20210706{
     }
 }
 
+class Fth_20210706{
+
+    //문자열 압축
+
+   fun solution(s: String): Int {
+        var minAnswer = s.length
+        for(i in 1..s.length/2){
+            var answer = s.length
+            var index = 0
+            while(index <= s.length - i){
+                val compressionCount = compression(index, i, s)
+                if(compressionCount == 0){
+                    index += i
+                }else{
+                    index += i * compressionCount
+                    answer = answer - (i * compressionCount) + 1
+                    if(compressionCount >= 9)
+                        answer++
+                }
+            }
+            if(answer < minAnswer)
+                minAnswer = answer
+        }
+        return minAnswer
+    }
+
+    private fun compression(startPoint : Int, size : Int, text : String) : Int{
+        val compareText = text.substring(startPoint, startPoint + size)
+        var compressionCount = 0
+        while(startPoint + ((compressionCount + 1) * size) + size <= text.length){
+            if(compareText == text.substring(startPoint + ((compressionCount + 1) * size),startPoint + ((compressionCount + 1) * size) + size )){
+                compressionCount++
+            }else
+                break
+        }
+        return compressionCount
+    }
+}
 
 fun main(){
     val test = Fir_20210706()
@@ -153,4 +191,7 @@ fun main(){
 
     val test2 = Trd_20210706()
     test2.solution(6,6, arrayOf(intArrayOf(2,2,5,4),intArrayOf(3,3,6,6), intArrayOf(5,1,6,3)))
+
+    val test3 = Fth_20210706()
+    test3.solution("xxxxxxxxxxyyy")
 }
