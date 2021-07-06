@@ -1,3 +1,4 @@
+import kotlin.math.max
 import kotlin.math.sign
 
 class Fir_20210706{
@@ -37,7 +38,119 @@ class Snd_20210706{
     }
 }
 
+class Trd_20210706{
+
+    //행렬 테두리 회전하기
+
+    private var minValue = 0
+    private var destinationPoint = intArrayOf()
+    private var startPoint = intArrayOf()
+    private var coveredNumber = -1
+    private val square = arrayListOf<ArrayList<Int>>()
+
+    fun solution(rows: Int, columns: Int, queries: Array<IntArray>): IntArray {
+        val answer = ArrayList<Int>()
+
+        initializeSquare(rows, columns)
+
+        for(i in queries){
+            initializeDefaultValues(i)
+            square.rotateRight(intArrayOf(i[0], i[1] + 1))
+            answer.add(minValue)
+        }
+
+        return answer.toIntArray()
+    }
+
+    private fun initializeSquare(rows : Int, columns: Int){
+        var nowNumber = 1
+        for(i in 0 until rows){
+            val horizontal = arrayListOf<Int>()
+            for(j in 0 until columns){
+                horizontal.add(nowNumber)
+                nowNumber++
+            }
+            square.add(horizontal)
+        }
+    }
+
+    private fun initializeDefaultValues(i : IntArray){
+        i.pointConversionToPrograming()
+        destinationPoint = intArrayOf(i[2], i[3])
+        startPoint = intArrayOf(i[0], i[1])
+        coveredNumber = square[i[0]][i[1] + 1]
+        minValue = square[i[0]][i[1] + 1]
+        square[i[0]][i[1] + 1] = square[i[0]][i[1]]
+    }
+
+    private fun IntArray.pointConversionToPrograming(){
+        this[0]--
+        this[1]--
+        this[2]--
+        this[3]--
+    }
+
+    private fun ArrayList<ArrayList<Int>>.rotateRight(nowPosition : IntArray){
+        if(nowPosition[1] >= destinationPoint[1])
+            this.rotateDown(nowPosition)
+        else{
+            this.moveNumber(nowPosition[0], nowPosition[1] + 1)
+
+            nowPosition[1]++
+            this.rotateRight(nowPosition)
+        }
+    }
+
+    private fun ArrayList<ArrayList<Int>>.rotateDown(nowPosition : IntArray){
+        if(nowPosition[0] >= destinationPoint[0])
+            this.rotateLeft(nowPosition)
+        else{
+            this.moveNumber(nowPosition[0] + 1, nowPosition[1])
+            nowPosition[0]++
+            this.rotateDown(nowPosition)
+        }
+
+    }
+
+    private fun ArrayList<ArrayList<Int>>.rotateLeft(nowPosition : IntArray){
+        if(nowPosition[1] <= startPoint[1])
+            this.rotateUp(nowPosition)
+        else{
+            this.moveNumber(nowPosition[0], nowPosition[1] - 1)
+            nowPosition[1]--
+            this.rotateLeft(nowPosition)
+        }
+    }
+
+    private fun ArrayList<ArrayList<Int>>.rotateUp(nowPosition : IntArray){
+        if(nowPosition[0] <= startPoint[0]) {
+            return
+        }
+        else{
+            this.moveNumber(nowPosition[0] - 1, nowPosition[1])
+            nowPosition[0]--
+            this.rotateUp(nowPosition)
+        }
+    }
+
+    private fun ArrayList<ArrayList<Int>>.moveNumber(y : Int, x : Int){
+        val tmp = this[y][x]
+        this[y][x] = coveredNumber
+        coveredNumber = tmp
+        checkIsMinValue()
+    }
+
+    private fun checkIsMinValue(){
+        if(coveredNumber < minValue)
+            minValue = coveredNumber
+    }
+}
+
+
 fun main(){
     val test = Fir_20210706()
     test.solution("3people unFollowed me")
+
+    val test2 = Trd_20210706()
+    test2.solution(6,6, arrayOf(intArrayOf(2,2,5,4),intArrayOf(3,3,6,6), intArrayOf(5,1,6,3)))
 }
