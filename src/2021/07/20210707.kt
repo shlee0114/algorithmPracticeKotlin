@@ -47,36 +47,7 @@ class Fir_20210707{
     }
 }
 
-class Snd_20210707{
-    //멀쩡한 사각형
-    //브레젠헴 알고리즘으로 푸는 중
-    fun solution(w: Int, h: Int): Long {
-        var p = 2 * w - h
-        val twoDy = 2 * w
-        val twoDyMinusDx = 2 * (w - h)
-        var x = 0
-        var y = 0
-        var answer = 0
-
-        while(x < w){
-            x++
-            answer++
-            p+= if(p < 0){
-                answer++
-                twoDy
-            }
-            else{
-                y++
-                twoDyMinusDx
-            }
-        }
-        return 0L
-    }
-}
-
 fun main(){
     val test = Fir_20210707()
     test.solution(arrayOf("Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan"))
-    val test2 = Snd_20210707()
-    test2.solution(8, 12)
 }
