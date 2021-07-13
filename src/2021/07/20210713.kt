@@ -113,10 +113,53 @@ class Snd_20210713{
     }
 }
 
+class Trd_20210713{
+    //쿼드압축 후 세기
+    private val totalAnswer = intArrayOf(0,0)
+    private var square = arrayOf(intArrayOf())
+
+    fun solution(arr: Array<IntArray>): IntArray {
+        square = arr
+        quadZip(0,0, square.size, square.size)
+        return totalAnswer
+    }
+
+    private fun quadZip(startX : Int, startY : Int, endX : Int, endY : Int){
+        if(checkIsAllSameNum(startX, startY, endX, endY))
+            return
+        else{
+            val centerX = (startX + endX) / 2
+            val centerY = (startY + endY) / 2
+
+            quadZip(startX, startY, centerX, centerY)
+            quadZip(centerX, startY,  endX, centerY )
+            quadZip(startX, centerY, centerX,  endY)
+            quadZip(centerX, centerY, endX, endY)
+        }
+    }
+
+    private fun checkIsAllSameNum(startX : Int, startY : Int, endX : Int, endY : Int) : Boolean{
+        val num = square[startY][startX]
+
+        for(i in startY until endY){
+            for(j in startX until endX){
+                if(num != square[i][j])
+                    return false
+            }
+        }
+        totalAnswer[num]++
+        return true
+    }
+}
+
+
+
 fun main(){
     val test = Fir_20210713()
     val test2 = Snd_20210713()
+    val test3 = Trd_20210713()
 
     test.solution(longArrayOf(2,7))
     test2.solution("1111111")
+    test3.solution(arrayOf(intArrayOf(1,1,0,0), intArrayOf(1,0,0,0), intArrayOf(1,0,0,1), intArrayOf(1,1,1,1)))
 }
