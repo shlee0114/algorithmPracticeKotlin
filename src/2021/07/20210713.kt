@@ -153,92 +153,106 @@ class Trd_20210713{
 }
 
 class Fth_20210713{
-
     //순위검색
+    private val conformity = mutableMapOf<String, ArrayList<Int>>()
 
-    private val programingLanguage = mutableMapOf<String, ArrayList<Int>>()
-    private val jobGroup = mutableMapOf<String, ArrayList<Int>>()
-    private val career = mutableMapOf<String, ArrayList<Int>>()
-    private val soulFood = mutableMapOf<String, ArrayList<Int>>()
-    private val score = arrayListOf<Int>()
-
-    private var degreeOfConformity = arrayOf<Int>()
-
-    private var passConformityCheck = arrayListOf<Int>()
+    private val applicantTestLanguage = arrayOf("cpp", "java", "python")
+    private val applicantJob = arrayOf("backend", "frontend")
+    private val applicantCareer = arrayOf("junior", "senior")
+    private val applicantSoulFood = arrayOf("chicken", "pizza")
 
     fun solution(info: Array<String>, query: Array<String>): IntArray {
         val answer = arrayListOf<Int>()
 
-        for(i in info.indices){
-            info[i].replace(",", "").split(" ").insertData(i)
-            passConformityCheck.add(i)
+        for(i in info){
+            val keyword = i.split(" ")
+            val searchKey = "${keyword[0]}${keyword[1]}${keyword[2]}${keyword[3]}"
+            val score = keyword[4].toInt()
+            insertData(searchKey, score)
+        }
+
+        conformity.forEach { (_, arrayList) ->
+            arrayList.sort()
+            arrayList.reverse()
         }
 
         for(i in query){
-            degreeOfConformity = Array(info.size){0}
             val desiredInformation = i.replace("and ", "").split(" ")
-            answer.add(desiredInformation.conformityCheck())
+            answer.add(desiredInformation.findSuitablePerson())
         }
 
         return answer.toIntArray()
     }
 
-    private fun List<String>.insertData(index : Int){
-        programingLanguage.insertData(get(0), index)
-        jobGroup.insertData(get(1), index)
-        career.insertData(get(2), index)
-        soulFood.insertData(get(3), index)
-        score.add(get(4).toInt())
-    }
-
-    private fun MutableMap<String, ArrayList<Int>>.insertData(id : String, data : Int){
-        if(!containsKey(id)){
-            set(id, arrayListOf())
+    private fun insertData(searchKey : String, score : Int){
+        val scoreArray = if(!conformity.containsKey(searchKey)){
+            arrayListOf()
+        }else{
+            conformity[searchKey]!!
         }
 
-        val nowList = get(id)?.apply {
-            add(data)
-        }
-
-        set(id, nowList!!)
+        scoreArray.add(score)
+        conformity[searchKey] = scoreArray
     }
 
-    private fun List<String>.conformityCheck() : Int{
-        val programingLanguageConformity = if(get(0) == "-") passConformityCheck else programingLanguage[get(0)] ?: return 0
-        val jobGroupConformity = if(get(1) == "-") passConformityCheck else jobGroup[get(1)] ?: return 0
-        val careerConformity = if(get(2) == "-") passConformityCheck else career[get(2)] ?: return 0
-        val soulFoodConformity = if(get(3) == "-") passConformityCheck else soulFood[get(3)] ?: return 0
+    private fun List<String>.findSuitablePerson() : Int{
+        val testLanguage = checkAllInclusive(0, get(0))
+        val job = checkAllInclusive(1, get(1))
+        val career = checkAllInclusive(2, get(2))
+        val soulFood = checkAllInclusive(3, get(3))
 
-        programingLanguageConformity.addDegreeOfConformity()
-        jobGroupConformity.addDegreeOfConformity()
-        careerConformity.addDegreeOfConformity()
-        soulFoodConformity.addDegreeOfConformity()
-
-        return degreeOfConformity.scoreCheck(get(4).toInt())
-    }
-
-    private fun ArrayList<Int>.addDegreeOfConformity(){
-        forEach {
-            degreeOfConformity[it]++
-        }
-    }
-
-    private fun Array<Int>.scoreCheck(goalScore : Int) : Int{
-        var totalCount = 0
-        forEachIndexed { index, i ->
-            if(i == 4){
-                if(score[index] >= goalScore){
-                    totalCount++
+        var answer = 0
+        for(i in testLanguage){
+            for(j in job){
+                for(h in career){
+                    for(k in soulFood){
+                        answer += findSuitablePerson("$i$j$h$k",get(4).toInt())
+                    }
                 }
             }
         }
-        return totalCount
+
+        return answer
+    }
+
+    private fun checkAllInclusive(type : Int, checkString : String) : Array<String>{
+        return if(checkString == "-"){
+            getAllInclusiveType(type)
+        }else{
+            arrayOf(checkString)
+        }
+    }
+
+    private fun getAllInclusiveType(type : Int) = when(type){
+        0 -> applicantTestLanguage
+        1 -> applicantJob
+        2 -> applicantCareer
+        3 -> applicantSoulFood
+        else -> arrayOf("")
+    }
+
+    private fun findSuitablePerson(key : String, goalScore : Int) : Int{
+        var answer = 0
+        val scoreArray = if(!conformity.containsKey(key)){
+            return 0
+        }else{
+            conformity[key]!!
+        }
+
+        for(i in scoreArray.reversed()){
+            if(i < goalScore){
+                return answer
+            }
+            answer++
+        }
+
+        return answer
     }
 }
 
 fun main(){
     val test4 = Fth_20210713()
 
-    test4.solution(arrayOf("cpp backend junior pizza 150","python frontend senior chicken 210","python frontend senior chicken 150","cpp backend senior pizza 260","cpp backend junior chicken 80","python backend senior chicken 50"),
-        arrayOf("java and backend and junior and pizza 100\",\"python and frontend and senior and chicken 200\",\"cpp and - and senior and pizza 250\",\"- and backend and senior and - 150\",\"- and - and - and chicken 100\",\"- and - and - and - 150"))
+    test4.solution(arrayOf("java backend junior pizza 150", "python frontend senior chicken 210", "python frontend senior chicken 150", "cpp backend senior pizza 260", "java backend junior chicken 80", "python backend senior chicken 50"),
+        arrayOf("java and backend and junior and pizza 100", "python and frontend and senior and chicken 200", "cpp and - and senior and pizza 250", "- and backend and senior and - 150", "- and - and - and chicken 100", "- and - and - and - 150"))
 }
