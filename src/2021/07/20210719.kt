@@ -1,5 +1,4 @@
 class Fir_20210719{
-
     //튜플
 
     private val tuple = arrayListOf<Int>()
@@ -33,7 +32,81 @@ class Fir_20210719{
     }
 }
 
+class Snd_20210719{
+    //삼각 달팽이
+    //3개 이상 넘어갈 시 하나의 삼각형이 더 생기는 현상을 이용해서 외각라인 구하고 3빼고를 반복해서 구한다.
+    //오른쪽 : 3 * (현재 단계(깊이) -1) - (왼쪽 수 - 2) + (시작 수 * 2)
+    private lateinit var triangle : IntArray
+    private var totalStep = 0
+    private var firstNum = 0
+    private var startDepth = 0
+
+    fun solution(n: Int): IntArray {
+        totalStep = n
+        triangle = IntArray(triangleTotalCount(n))
+        triangle[0] = 0
+        var startNum = 0
+
+        while(triangle.contains(0)){
+            triangleOutline(firstNum + 1, totalStep, startNum)
+            firstNum = triangle.getMaxVal()
+            startNum = triangle.indexOf(0)
+            totalStep -= 3
+            startDepth += 2
+        }
+        return triangle
+    }
+
+    private fun triangleTotalCount(depth : Int) : Int{
+        var count = 0
+
+        for(i in 1 .. depth){
+            count += i
+        }
+
+        return count
+    }
+
+    private fun triangleOutline(startNum : Int, step : Int, storageLocation : Int){
+        var inProgressNum = startNum
+        var inProgressStorageLocation = storageLocation
+
+        for(i in 0 until step){
+            lineBothEnds(inProgressNum, i, inProgressStorageLocation)
+            inProgressNum++
+            inProgressStorageLocation += 1 + i + startDepth
+        }
+    }
+
+    private fun lineBothEnds(startNum : Int, step : Int, storageLocation : Int){
+        when(step){
+            0 -> triangle[storageLocation] = startNum
+            totalStep - 1 -> {
+                var numTmp = startNum
+                for(i in 0 until totalStep){
+                    triangle[storageLocation + i] = numTmp
+                    numTmp++
+                }
+            }
+            else -> {
+                triangle[storageLocation] = startNum
+                triangle[storageLocation + step] = 3 * (totalStep - 1) - (startNum - 2) + (firstNum * 2)
+            }
+        }
+    }
+
+    private fun IntArray.getMaxVal() : Int{
+        var maxVal = 0
+        forEach {
+            if(it > maxVal)
+                maxVal = it
+        }
+        return maxVal
+    }
+
+}
+
 fun main(){
-    val test = Fir_20210719()
-    test.solution("{{1,2,3},{2,1},{1,2,4,3},{2}}")
+    val test = Snd_20210719()
+    test.solution(5)
 }
