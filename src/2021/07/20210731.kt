@@ -71,8 +71,65 @@ class Fir_20210731{
     }
 }
 
+class Snd_20210731{
+
+    //순위
+
+    private val win = mutableMapOf<Int, ArrayList<Int>>()
+    private val lose = mutableMapOf<Int, ArrayList<Int>>()
+    private var answer = 0
+
+    fun solution(n: Int, results: Array<IntArray>): Int {
+        results.toMap()
+        getRanking(n)
+        return answer
+    }
+
+    private fun Array<IntArray>.toMap(){
+        forEach {
+            win.addNumber(it[0],it[1])
+            lose.addNumber(it[1],it[0])
+        }
+    }
+
+    private fun MutableMap<Int, ArrayList<Int>>.addNumber(key : Int, number : Int){
+        val value = get(key)?: arrayListOf()
+        if(!value.contains(number)){
+            value.add(number)
+            set(key, value)
+        }
+    }
+
+    private fun getRanking(peopleCount : Int){
+        for(i in 1..peopleCount){
+            val winner = win.peopleCount(i, 0, arrayListOf()) - 1
+            val loser = lose.peopleCount(i, 0, arrayListOf()) - 1
+
+            if(loser + winner == peopleCount - 1)
+                answer++
+        }
+    }
+
+    private fun MutableMap<Int, ArrayList<Int>>.peopleCount(people : Int, count : Int, peoples : ArrayList<Int>) : Int{
+        var totalCount = count + 1
+
+        get(people)?.let {
+            for(i in it){
+                if(!peoples.contains(i)){
+                    peoples.add(i)
+                    totalCount = peopleCount(i, totalCount, peoples)
+                }
+            }
+        }
+
+        return totalCount
+    }
+}
+
 fun main(){
     val test = Fir_20210731()
     test.solution(6, arrayOf(intArrayOf(3, 6), intArrayOf(4, 3), intArrayOf(3, 2), intArrayOf(1, 3), intArrayOf(1, 2), intArrayOf(2, 4), intArrayOf(5, 2)))
 
+    val test2 = Snd_20210731()
+    test2.solution(5, arrayOf(intArrayOf(4, 3), intArrayOf(4, 2), intArrayOf(3, 2), intArrayOf(1, 2), intArrayOf(2, 5)))
 }
