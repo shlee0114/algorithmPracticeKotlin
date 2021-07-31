@@ -126,10 +126,44 @@ class Snd_20210731{
     }
 }
 
+class Trd_20210731{
+
+    //가장 긴 팰린드롬
+
+    fun solution(s: String): Int {
+        var deleteStringCount = 0
+        if(s.checkPalindrome(0, s.length - 1)){
+            return s.length
+        }
+        while(true){
+            deleteStringCount++
+            for(i in 0 .. deleteStringCount){
+                if(s.checkPalindrome(i,  s.length - (deleteStringCount - i) - 1)){
+                    return s.length - deleteStringCount
+                }
+            }
+        }
+    }
+
+    private fun String.checkPalindrome(startIndex : Int, endIndex : Int) : Boolean{
+        val alpha = toCharArray()
+        val centerNumber = (alpha.size - startIndex- (length - endIndex) + 1) / 2
+        for(i in 0 .. centerNumber){
+            if(alpha[startIndex + i] != alpha[endIndex - i]){
+                return false
+            }
+        }
+        return true
+    }
+}
+
 fun main(){
     val test = Fir_20210731()
     test.solution(6, arrayOf(intArrayOf(3, 6), intArrayOf(4, 3), intArrayOf(3, 2), intArrayOf(1, 3), intArrayOf(1, 2), intArrayOf(2, 4), intArrayOf(5, 2)))
 
     val test2 = Snd_20210731()
     test2.solution(5, arrayOf(intArrayOf(4, 3), intArrayOf(4, 2), intArrayOf(3, 2), intArrayOf(1, 2), intArrayOf(2, 5)))
+
+    val test3 = Trd_20210731()
+    test3.solution("abacde")
 }
