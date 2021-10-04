@@ -79,7 +79,44 @@ class snd_1004{
     }
 }
 
+class thd_1004{
+    fun solution(sizes: Array<IntArray>): Int {
+        val sortedSizes = Array(sizes.size){sizes[it].sorted()}
+        val verticalMaxSize =  sortedSizes.getVerticalMax()
+        val horizontalMaxSize = sortedSizes.getHorizontalMax()
+        //val verticalMaxSize = sortedSizes.maxOf { it.first() }
+       // val horizontalMaxSize = sortedSizes.maxOf { it[1] }
+
+
+        return verticalMaxSize * horizontalMaxSize /// gcd(verticalMaxSize, horizontalMaxSize)
+    }
+
+    private fun Array<List<Int>>.getVerticalMax() : Int{
+        var maxVal = 0
+
+        forEach {
+            if(maxVal < it[0])
+                maxVal = it[0]
+        }
+
+        return maxVal
+    }
+
+    private fun Array<List<Int>>.getHorizontalMax() : Int{
+        var maxVal = 0
+
+        forEach {
+            if(maxVal < it[1])
+                maxVal = it[1]
+        }
+
+        return maxVal
+    }
+
+    fun gcd(a: Int, b:Int): Int = if(b != 0) gcd(b, a % b) else a
+}
+
 fun main(){
-    val test = snd_1004()
-    test.solution(intArrayOf(1, 4, 2, 3), intArrayOf(2, 1, 3, 4))
+    val test = thd_1004()
+    println(test.solution(arrayOf(intArrayOf(60, 50), intArrayOf(30, 70), intArrayOf(60, 30), intArrayOf(18, 7), intArrayOf(80, 40))))
 }
