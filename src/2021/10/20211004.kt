@@ -1,3 +1,6 @@
+import java.util.*
+import kotlin.collections.ArrayList
+
 class fir_1004 {
 
     data class People(
@@ -42,7 +45,41 @@ class fir_1004 {
     }
 }
 
+class snd_1004{
+    fun solution(enter: IntArray, leave: IntArray): IntArray {
+        val innerPeople = mutableListOf<Int>()
+        val meetPeople = Array(enter.size){ mutableSetOf<Int>() }
+
+        var leaveIndex = 0
+
+        for(enterPeople in enter){
+            innerPeople.add(enterPeople)
+
+            while(leave.size > leaveIndex){
+                if(innerPeople.contains(leave[leaveIndex])){
+                    for(j in meetPeople.indices){
+                        if(innerPeople.contains(j + 1)){
+                            meetPeople[j].add(leave[leaveIndex])
+                        }
+                    }
+
+                    for(i in innerPeople){
+                        meetPeople[leave[leaveIndex] - 1].add(i)
+                    }
+
+                    innerPeople.remove(leave[leaveIndex])
+                    leaveIndex++
+                }else{
+                    break
+                }
+            }
+        }
+
+        return IntArray(meetPeople.size){ meetPeople[it].size - 1}
+    }
+}
+
 fun main(){
-    val test = fir_1004()
-    test.solution(intArrayOf(50,82,75,120), arrayOf("NLWL","WNLL","LWNW","WWLN"))
+    val test = snd_1004()
+    test.solution(intArrayOf(1, 4, 2, 3), intArrayOf(2, 1, 3, 4))
 }
