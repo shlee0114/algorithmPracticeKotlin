@@ -1,55 +1,54 @@
 class fir{
-    fun solution(table: Array<String>, languages: Array<String>, preference: IntArray): String {
-        val totalPoints = Array(table.size){0}
-        val occupation = Array(table.size){""}
 
-        for(rowIndex in table.indices){
-            val rowValue = table[rowIndex]
-            val columns = rowValue.split(" ")
-            occupation[rowIndex] = columns[0]
+    private val wordString = arrayOf("", "A", "E", "I", "O", "U")
+    private val wordNumber = arrayOf(0,0,0,0,0)
 
-            for(columnIndex in 1 until columns.size){
-                val point = checkPoint(columns[columnIndex], languages, preference)
-                totalPoints[rowIndex] += point * (6 - columnIndex)
-            }
-        }
-
-        return getHigherPoint(totalPoints, occupation)
+    fun solution(word: String): Int {
+        return nextNumber(word, 0)
     }
 
-    private fun checkPoint(languages : String, userLanguages : Array<String>, userPreference : IntArray) : Int {
-        for (i in userLanguages.indices) {
-            if (languages == userLanguages[i]) {
-                return userPreference[i]
+    private fun nextNumber(targetWord : String, count : Int) : Int{
+        var innerCount = count
+        for(word in wordNumber.indices){
+            if(wordNumber[word] == 0){
+                innerCount++
+                wordNumber[word] = 1
+                if(checkWord(targetWord))
+                    return innerCount
             }
         }
+        wordNumber[4]++
+        innerCount++
+        roundUp()
 
-        return 0
+        if(checkWord(targetWord))
+            return innerCount
+
+        return nextNumber(targetWord, innerCount)
     }
 
-    private fun getHigherPoint(totalPoints : Array<Int>, occupation : Array<String>) : String{
-        val maxPoint = totalPoints.maxOrNull()?:0
-        var maxOccupation = ""
-
-        for(i in totalPoints.indices){
-            if(maxPoint == totalPoints[i]){
-                maxOccupation = if(maxOccupation == ""){
-                    occupation[i]
-                }else{
-                    if(maxOccupation < occupation[i]){
-                        maxOccupation
-                    }else{
-                        occupation[i]
-                    }
-                }
+    private fun checkWord(targetWord: String) : Boolean{
+        var word = ""
+        for(i in wordNumber){
+            if(i > 0){
+                word += wordString[i]
             }
         }
-        return maxOccupation
+
+        return targetWord == word
+    }
+
+    private fun roundUp(){
+        for(i in wordNumber.indices.reversed()){
+            if(wordNumber[i] > 5){
+                wordNumber[i - 1] += wordNumber[i] - 5
+                wordNumber[i] -= 6
+            }
+        }
     }
 }
 
 fun main(){
     val test = fir()
-    test.solution(arrayOf("SI JAVA JAVASCRIPT SQL PYTHON C#", "CONTENTS JAVASCRIPT JAVA PYTHON SQL C++", "HARDWARE C C++ PYTHON JAVA JAVASCRIPT", "PORTAL JAVA JAVASCRIPT PYTHON KOTLIN PHP", "GAME C++ C# JAVASCRIPT C JAVA"),
-    arrayOf("PYTHON", "C++", "SQL"), intArrayOf(7, 5, 5))
+    test.solution("I")
 }
